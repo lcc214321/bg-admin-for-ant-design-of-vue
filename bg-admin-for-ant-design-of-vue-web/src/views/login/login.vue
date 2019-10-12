@@ -134,6 +134,9 @@
   </div>
 </template>
 <script>
+
+    import { login } from '../../api/sys/login/login.api';
+
     export default {
         name: 'login',
         data() {
@@ -172,6 +175,11 @@
                         // 采用账号密码登录
                         if (customActiveKey === 'tab1') {
                             console.log("账号密码登录")
+                            login(loginParams).then(res => {
+                                if (res.code == 200) {
+                                   console.log('====>' + JSON.stringify(res))
+                                }
+                            })
                         } else {
                             console.log("手机号码登录")
                         }
