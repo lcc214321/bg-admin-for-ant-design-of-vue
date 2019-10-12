@@ -2,8 +2,6 @@
   <a-locale-provider :locale="locale">
     <div id="app">
       <router-view/>
-      <a-pagination showSizeChanger :defaultCurrent="3" :total="500"/>
-      {{$t('dict.title')}}
     </div>
   </a-locale-provider>
 </template>
@@ -16,14 +14,11 @@
         name: 'App',
         data() {
             return {
-                locale: zhCN,
-                localeval: 'zh-CN',
-                lang: 'zh-CN'
+                locale: zhCN
             }
         },
         watch: {
             userLang(newVal, oldVal) {
-                const lang = newVal.replace('-','_')
                 if (newVal === 'zh-CN') {
                     this.locale = zhCN
                 } else {
@@ -41,11 +36,6 @@
 
 <style>
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+    height: 100%;
   }
 </style>
