@@ -1,0 +1,63 @@
+let utils = {};
+
+utils.title = function (title) {
+  title = title ? title : 'ant design project';
+  window.document.title = title;
+};
+
+export const forEach = (arr, fn) => {
+  if (!arr.length || !fn) return;
+  let i = -1;
+  let len = arr.length;
+  while (++i < len) {
+    let item = arr[i];
+    fn(item, i, arr);
+  }
+};
+
+/**
+ * 获取当前登陆的用户的权限集合数据
+ * @param list {Array} 所有的路由集合数据
+ * @param access {Array} 当前允许登陆的路由集合数据
+ */
+export const getLoginMenuList = (list, access) => {
+  let res = [];
+  forEach(list, item => {
+    if (!item.meta || (item.meta && !item.meta.hideInMenu)) {
+      let obj = {
+        icon: (item.meta && item.meta.icon) || '',
+        name: item.name,
+        meta: item.meta,
+        code: item.code,
+        path: item.path
+      };
+      if (hasChild(item) && showThisMenuEle(item, access)) {
+        obj.children = getLoginMenuList(item.children, access);
+      }
+      if (showThisMenuEle(item, access)) res.push(obj);
+    }
+  })
+  return res;
+}
+
+/**
+ * 功能描述： 判断当前登录的用户是否拥有节点的权限
+ * @param item
+ * @param access
+ * @returns {boolean}
+ */
+const showThisMenuEle = (item, access) => {
+  // let code = item.meta.code;
+  // if(access.indexOf(code)!=-1){
+  //   return true;
+  // }else{
+  //   return false;
+  // }
+  return true;
+}
+
+export const hasChild = (item) => {
+  return item.children !=undefined && item.children.length !== 0
+};
+
+export default utils;
