@@ -16,6 +16,52 @@ export const forEach = (arr, fn) => {
 };
 
 /**
+ * @param {Array} routers 路由列表数组
+ * @description 用于找到路由列表中name为home的对象
+ */
+export const getHomeRoute = routers => {
+  let i = -1;
+  let len = routers.length;
+  let homeRoute = {};
+  while (++i < len) {
+    let item = routers[i];
+    if (item.children && item.children.length) {
+      let res = getHomeRoute(item.children);
+      if (res.name) return res;
+    } else {
+      if (item.name === 'home') homeRoute = item;
+    }
+  }
+  return homeRoute;
+};
+
+/**
+ * @param {Array} routeMetched 当前路由metched
+ * @returns {Array}
+ */
+export const getBreadCrumbList = (routeMetched, homeRoute) => {
+  let res = routeMetched.filter(item => {
+    return item.meta === undefined || !item.meta.hide
+  }).map(item => {
+    let obj = {
+      icon: (item.meta && item.meta.icon) || '',
+      name: item.name,
+      meta: item.meta
+    };
+    return obj
+  });
+  res = res.filter(item => {
+    return !item.meta.hideInMenu
+  });
+  if(homeRoute.path!= undefined){
+    return [Object.assign(homeRoute, { to: homeRoute.path }), ...res];
+  }else{
+    return [...res];
+  }
+};
+
+
+/**
  * 获取当前登陆的用户的权限集合数据
  * @param list {Array} 所有的路由集合数据
  * @param access {Array} 当前允许登陆的路由集合数据
