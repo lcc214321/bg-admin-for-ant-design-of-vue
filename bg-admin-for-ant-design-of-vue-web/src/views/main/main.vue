@@ -60,26 +60,27 @@
             <div style="height: 62px;display: inline-block;">
               <a-icon type="global"/>
             </div>
-            <a-menu slot="overlay">
-              <a-menu-item key="1">CN 简体中文</a-menu-item>
-              <a-menu-item key="2">eu 英文</a-menu-item>
+            <a-menu slot="overlay" @click="handleLanguageChange">
+              <a-menu-item key="zh-CN">简体中文</a-menu-item>
+              <a-menu-item key="en-US">英文</a-menu-item>
             </a-menu>
           </a-dropdown>
         </div>
       </a-layout-header>
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item >
-            <a-icon type="home" />首页
+          <a-breadcrumb-item>
+            <a-icon type="home"/>
+            首页
           </a-breadcrumb-item>
           <template v-for="item in breadCrumbList">
-            <a-breadcrumb-item >
+            <a-breadcrumb-item>
               <a-icon :type=item.icon />
               <span>{{showBreadcrumbItem(item)}}</span>
             </a-breadcrumb-item>
           </template>
         </a-breadcrumb>
-        <a-layout-content :style="{  padding: '12px', background: '#fff', minHeight: '280px' }">
+        <a-layout-content :style="{   background: '#fff', minHeight: '280px' }">
           <router-view/>
         </a-layout-content>
       </a-layout>
@@ -97,16 +98,26 @@
       }
     },
     methods: {
+      ...mapActions([
+        'setUserLanguage'
+      ]),
       ...mapMutations([
         'setBreadCrumb'
       ]),
+      handleLanguageChange(e) {
+        this.$i18n.locale = e.key
+        localStorage.setItem('lang', e.key)
+        this.setUserLanguage({userLang: e.key})
+      },
       showBreadcrumbItem(item) {
         return (item.meta && item.meta.title) || item.name
       },
       handleClick(e) {
         this.$router.push({
           name: e.key
-        }).catch(err => {err})
+        }).catch(err => {
+          err
+        })
       }
     },
     watch: {

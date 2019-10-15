@@ -31,6 +31,13 @@
                 return this.$store.getters.userLang
             }
         },
+      mounted() {
+        if (localStorage.getItem('lang') === 'zh-CN') {
+          this.locale = zhCN
+        } else {
+          this.locale = enUs
+        }
+      }
     }
 </script>
 
